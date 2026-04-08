@@ -6,79 +6,137 @@
 <title>Crew Coverage Dashboard — Roebuck Landscaping</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700;800&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--red:#C0392B;--red-dark:#922B21;--red-pale:#FADBD8;--red-faint:#FDF2F0;--cream:#FDF8F5;--white:#FFFFFF;--border:#E8D5D2;--text:#1A0A09;--muted:#7B3F38;--muted-light:#B07068;--green-score:#1A7A3A;--amber-score:#B7770D;--amber-pale:#FEF3CD;--amber-border:#F0C040;}
+:root{--red:#C0392B;--red-dark:#922B21;--red-pale:#FADBD8;--red-faint:#FDF2F0;--cream:#FDF8F5;--white:#fff;--border:#E8D5D2;--text:#1A0A09;--muted:#7B3F38;--muted-light:#B07068;--green:#1A7A3A;--amber:#B7770D;--amber-pale:#FEF3CD;}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--cream);color:var(--text);font-family:'Source Sans 3',sans-serif;min-height:100vh}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle at 1px 1px,rgba(192,57,43,0.06) 1px,transparent 0);background-size:28px 28px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle at 1px 1px,rgba(192,57,43,0.05) 1px,transparent 0);background-size:28px 28px}
 .wrap{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 24px 60px}
 .topbar{background:var(--red);height:6px;margin:0 -24px}
-header{display:flex;align-items:center;gap:28px;padding:32px 0 36px;border-bottom:2px solid var(--border);margin-bottom:40px;flex-wrap:wrap}
-.logo-img{width:88px;height:88px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(192,57,43,0.18))}
+header{display:flex;align-items:center;gap:28px;padding:32px 0 0;flex-wrap:wrap}
+.logo-img{width:80px;height:80px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(192,57,43,0.18))}
 .header-text .eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
-.header-text h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:800;line-height:1.1}
+.header-text h1{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;line-height:1.1}
 .header-meta{text-align:right;flex-shrink:0;margin-left:auto}
 .meta-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
 .meta-value{font-family:'DM Mono',monospace;font-size:13px;color:var(--red);margin-bottom:10px;font-weight:500}
 .pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:6px;animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
-.summary-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:40px}
-.s-card{background:var(--white);border:1.5px solid var(--border);border-top:3px solid var(--red);border-radius:10px;padding:18px 20px;transition:box-shadow .2s;box-shadow:0 1px 4px rgba(192,57,43,0.06)}
-.s-card:hover{box-shadow:0 4px 16px rgba(192,57,43,0.12)}
+
+/* Tabs */
+.tab-bar{display:flex;gap:0;border-bottom:2px solid var(--border);margin:24px 0 32px}
+.tab-btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:12px 20px;border:none;background:none;cursor:pointer;color:var(--muted-light);border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--red);border-bottom-color:var(--red);font-weight:500}
+.tab-pane{display:none}.tab-pane.active{display:block}
+
+/* Summary strip */
+.summary-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:36px}
+.s-card{background:var(--white);border:1.5px solid var(--border);border-top:3px solid var(--red);border-radius:10px;padding:16px 18px;box-shadow:0 1px 4px rgba(192,57,43,0.06);transition:box-shadow .2s}
+.s-card:hover{box-shadow:0 4px 14px rgba(192,57,43,0.11)}
 .s-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-light);margin-bottom:8px}
-.s-value{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;line-height:1;color:var(--text)}
-.s-value small{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:400;color:var(--muted-light);margin-left:4px}
-.chart-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:28px;margin-bottom:32px;box-shadow:0 1px 4px rgba(192,57,43,0.06)}
-.card-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-light);margin-bottom:28px}
-.bar-chart{display:flex;align-items:flex-end;gap:16px;height:160px;padding-bottom:36px;position:relative;border-bottom:1.5px solid var(--border)}
+.s-value{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;line-height:1;color:var(--text)}
+.s-value small{font-family:'Source Sans 3',sans-serif;font-size:12px;font-weight:400;color:var(--muted-light);margin-left:4px}
+
+/* Bar chart */
+.chart-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:24px;margin-bottom:28px;box-shadow:0 1px 4px rgba(192,57,43,0.06)}
+.card-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-light);margin-bottom:24px}
+.bar-chart{display:flex;align-items:flex-end;gap:14px;height:150px;padding-bottom:34px;position:relative;border-bottom:1.5px solid var(--border)}
 .bar-chart::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
 .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
-.bar{width:100%;max-width:72px;border-radius:6px 6px 0 0;position:relative;transition:filter .2s}
-.bar:hover{filter:brightness(1.08)}
-.bar.good{background:var(--red)}.bar.warn{background:var(--amber-score)}.bar.low{background:#999}
+.bar{width:100%;max-width:70px;border-radius:6px 6px 0 0;position:relative;transition:filter .2s}.bar:hover{filter:brightness(1.08)}
+.bar.good{background:var(--red)}.bar.warn{background:var(--amber)}.bar.low{background:#999}
 .bar-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--text);position:absolute;top:-20px;left:50%;transform:translateX(-50%);white-space:nowrap;font-weight:500}
 .bar-name{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:600;color:var(--muted);position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);white-space:nowrap}
-.chart-footer{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-light);text-align:center;margin-top:14px}
-.section-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-light);margin-bottom:16px}
-.managers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px;margin-bottom:48px}
-.m-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:24px;transition:box-shadow .2s,transform .2s;box-shadow:0 1px 4px rgba(192,57,43,0.06);animation:fadeUp .5s ease both}
-.m-card:hover{box-shadow:0 6px 20px rgba(192,57,43,0.13);transform:translateY(-2px)}
+.chart-footer{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-light);text-align:center;margin-top:12px}
+
+/* Manager grid */
+.section-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-light);margin-bottom:14px}
+.managers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:40px}
+.m-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:22px;box-shadow:0 1px 4px rgba(192,57,43,0.06);transition:box-shadow .2s,transform .2s;animation:fadeUp .5s ease both}
+.m-card:hover{box-shadow:0 5px 18px rgba(192,57,43,0.12);transform:translateY(-2px)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.m-card:nth-child(1){animation-delay:.05s}.m-card:nth-child(2){animation-delay:.10s}.m-card:nth-child(3){animation-delay:.15s}.m-card:nth-child(4){animation-delay:.20s}.m-card:nth-child(5){animation-delay:.25s}
-.m-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.m-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700}
-.m-score{font-family:'DM Mono',monospace;font-size:22px;font-weight:500}
-.m-score.good{color:var(--green-score)}.m-score.warn{color:var(--amber-score)}.m-score.low{color:#888}
-.m-bar-wrap{height:5px;background:var(--red-pale);border-radius:99px;margin-bottom:16px;overflow:hidden}
-.m-bar-fill{height:100%;border-radius:99px}
-.m-bar-fill.good{background:var(--red)}.m-bar-fill.warn{background:var(--amber-score)}.m-bar-fill.low{background:#bbb}
-.crew-list{display:flex;flex-direction:column;gap:6px}
-.crew-row{display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--red-faint);border-radius:7px;border:1px solid transparent;transition:border-color .15s}
-.crew-row:hover{border-color:var(--border)}
+.m-card:nth-child(1){animation-delay:.05s}.m-card:nth-child(2){animation-delay:.1s}.m-card:nth-child(3){animation-delay:.15s}.m-card:nth-child(4){animation-delay:.2s}.m-card:nth-child(5){animation-delay:.25s}
+.m-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.m-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
+.m-score{font-family:'DM Mono',monospace;font-size:20px;font-weight:500}
+.m-score.good{color:var(--green)}.m-score.warn{color:var(--amber)}.m-score.low{color:#888}
+.m-bar-wrap{height:4px;background:var(--red-pale);border-radius:99px;margin-bottom:14px;overflow:hidden}
+.m-bar-fill{height:100%;border-radius:99px}.m-bar-fill.good{background:var(--red)}.m-bar-fill.warn{background:var(--amber)}.m-bar-fill.low{background:#bbb}
+.crew-list{display:flex;flex-direction:column;gap:5px}
+.crew-row{display:flex;align-items:center;gap:10px;padding:6px 9px;background:var(--red-faint);border-radius:6px}
 .crew-name{flex:1;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.crew-mini{width:52px;height:3px;background:var(--red-pale);border-radius:99px;overflow:hidden;flex-shrink:0}
+.crew-mini{width:48px;height:3px;background:var(--red-pale);border-radius:99px;overflow:hidden;flex-shrink:0}
 .crew-mini-fill{height:100%;border-radius:99px;background:var(--red);opacity:.5}
-.crew-score{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);min-width:32px;text-align:right;flex-shrink:0;font-weight:500}
-/* Alert sections */
-.alert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px;margin-bottom:48px}
-.alert-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:24px;box-shadow:0 1px 4px rgba(192,57,43,0.06);animation:fadeUp .5s ease both}
-.alert-card.ob{border-top:3px solid var(--red)}
-.alert-card.lh{border-top:3px solid var(--amber-score)}
+.crew-score{font-family:'DM Mono',monospace;font-size:12px;min-width:28px;text-align:right;flex-shrink:0;font-weight:500}
+
+/* Alert cards */
+.alert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:40px}
+.alert-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:22px;box-shadow:0 1px 4px rgba(192,57,43,0.06);animation:fadeUp .5s ease both}
+.alert-card.ob{border-top:3px solid var(--red)}.alert-card.lh{border-top:3px solid var(--amber)}
 .alert-manager{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.alert-badge{font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:500}
-.badge-ob{background:var(--red-pale);color:var(--red)}
-.badge-lh{background:var(--amber-pale);color:var(--amber-score)}
+.badge{font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:99px}
+.badge-ob{background:var(--red-pale);color:var(--red)}.badge-lh{background:var(--amber-pale);color:var(--amber)}
+.badge-ok{background:#E8F5E9;color:var(--green)}
 .alert-list{display:flex;flex-direction:column;gap:6px}
 .alert-row{padding:8px 10px;border-radius:7px;border:1px solid var(--border)}
-.alert-row.ob{background:var(--red-faint)}
-.alert-row.lh{background:var(--amber-pale)}
+.alert-row.ob{background:var(--red-faint)}.alert-row.lh{background:var(--amber-pale)}
 .alert-job{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
-.alert-meta{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-light);display:flex;gap:12px;flex-wrap:wrap}
-.alert-meta span{display:inline-flex;align-items:center;gap:4px}
-.none-msg{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-light);text-align:center;padding:16px;background:var(--red-faint);border-radius:7px}
-footer{border-top:1.5px solid var(--border);padding-top:24px;display:flex;align-items:center;gap:10px}
-.foot-logo img{width:32px;height:32px;object-fit:contain;opacity:.7}
+.alert-meta{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-light);display:flex;gap:10px;flex-wrap:wrap}
+.none-msg{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-light);text-align:center;padding:14px;background:var(--red-faint);border-radius:7px}
+
+/* === TAB 2: ANALYSIS === */
+/* Sparkline trend chart */
+.analysis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:40px}
+.analysis-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:22px;box-shadow:0 1px 4px rgba(192,57,43,0.06);animation:fadeUp .5s ease both}
+.analysis-card:nth-child(1){animation-delay:.05s}.analysis-card:nth-child(2){animation-delay:.1s}.analysis-card:nth-child(3){animation-delay:.15s}.analysis-card:nth-child(4){animation-delay:.2s}.analysis-card:nth-child(5){animation-delay:.25s}
+.analysis-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.analysis-manager{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
+.trend-label{font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:99px}
+.trend-up{background:#E8F5E9;color:var(--green)}.trend-down{background:var(--red-pale);color:var(--red)}.trend-flat{background:#F5F5F5;color:#666}
+
+/* Sparkline SVG */
+.sparkline-wrap{margin-bottom:16px}
+.spark-labels{display:flex;justify-content:space-between;margin-top:4px}
+.spark-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted-light)}
+
+/* Crew mini trends */
+.crew-trends{display:flex;flex-direction:column;gap:8px}
+.crew-trend-row{display:flex;align-items:center;gap:10px}
+.crew-trend-name{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crew-spark{flex-shrink:0}
+
+/* Analysis sections */
+.repeat-list{display:flex;flex-direction:column;gap:6px}
+.repeat-row{padding:8px 10px;background:var(--amber-pale);border:1px solid #F0C040;border-radius:7px}
+.repeat-job{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+.repeat-meta{font-family:'DM Mono',monospace;font-size:11px;color:var(--amber);display:flex;gap:10px;flex-wrap:wrap}
+
+/* Day heatmap */
+.heatmap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:40px}
+.heatmap-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:22px;box-shadow:0 1px 4px rgba(192,57,43,0.06)}
+.day-bars{display:flex;gap:8px;align-items:flex-end;height:48px;margin-bottom:8px}
+.day-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.day-bar-fill{width:100%;border-radius:3px 3px 0 0;background:var(--red);min-height:2px;transition:height .5s}
+.day-bar-fill.empty{background:#ddd}
+.day-name{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted-light);text-transform:uppercase}
+
+/* Recurrence */
+.recur-list{display:flex;flex-direction:column;gap:5px}
+.recur-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;border:1px solid var(--border)}
+.recur-row.every{background:#E8F5E9;border-color:#A5D6A7}
+.recur-row.mostly{background:var(--red-faint)}
+.recur-row.rare{background:#F5F5F5}
+.recur-job{flex:1;font-size:12px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recur-weeks{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-light);flex-shrink:0}
+.recur-badge{font-family:'DM Mono',monospace;font-size:9px;padding:1px 6px;border-radius:99px;flex-shrink:0}
+.recur-badge.every{background:#C8E6C9;color:#1B5E20}
+.recur-badge.mostly{background:var(--red-pale);color:var(--red)}
+.recur-badge.rare{background:#EEE;color:#666}
+
+footer{border-top:1.5px solid var(--border);padding-top:22px;display:flex;align-items:center;gap:10px;margin-top:8px}
+.foot-logo img{width:28px;height:28px;object-fit:contain;opacity:.65}
 .foot-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted-light);letter-spacing:.1em}
-@media(max-width:600px){.header-text h1{font-size:24px}.summary-strip{grid-template-columns:repeat(2,1fr)}.managers-grid,.alert-grid{grid-template-columns:1fr}.header-meta{display:none}}
+@media(max-width:600px){.header-text h1{font-size:24px}.summary-strip{grid-template-columns:repeat(2,1fr)}.managers-grid,.alert-grid,.analysis-grid,.heatmap-grid{grid-template-columns:1fr}.header-meta{display:none}}
 </style>
 </head>
 <body>
@@ -88,7 +146,7 @@ footer{border-top:1.5px solid var(--border);padding-top:24px;display:flex;align-
   <img class="logo-img" src="https://raw.githubusercontent.com/dchesebro-byte/aspiredashbpoardroebuck/main/logo.png" alt="Roebuck Landscaping" onerror="this.style.display='none'">
   <div class="header-text">
     <div class="eyebrow">Schedule Intelligence</div>
-    <h1>Crew Coverage<br>Dashboard</h1>
+    <h1>Crew Coverage Dashboard</h1>
   </div>
   <div class="header-meta">
     <div class="meta-label">Last updated</div>
@@ -97,62 +155,195 @@ footer{border-top:1.5px solid var(--border);padding-top:24px;display:flex;align-
     <div class="meta-value" id="window-range"></div>
   </div>
 </header>
-<div id="main-content"></div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="showTab('analysis')">Analysis</button>
+</div>
+
+<div id="tab-overview" class="tab-pane active">
+  <div id="overview-content"></div>
+</div>
+<div id="tab-analysis" class="tab-pane">
+  <div id="analysis-content"></div>
+</div>
+
 <footer>
   <div class="foot-logo"><img src="https://raw.githubusercontent.com/dchesebro-byte/aspiredashbpoardroebuck/main/logo.png" alt="Roebuck" onerror="this.style.display='none'"></div>
   <div class="foot-note">ROEBUCK LANDSCAPING &nbsp;&middot;&nbsp; CREW COVERAGE &nbsp;&middot;&nbsp; UPDATED EVERY MONDAY</div>
 </footer>
 </div>
+
 <script>
-const DATA = {"runDate":"2026-04-08T20:00:00.000Z","windowStart":"April 06, 2026","windowEnd":"May 31, 2026","managers":[{"manager":"Javier Guzman","averageScore":8,"crewCount":3,"crews":[{"name":"Hardscape Crew 2-Henry Raymundo","totalDays":40,"score":8,"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | DR Horton Props","occurrences":1,"minHours":1}]},{"name":"Hardscape Crew 3-Miguel Paulin","totalDays":40,"score":8,"overBudgetJobs":[],"lowHoursJobs":[]},{"name":"Hardscape Crew 4 - Jose Usiel Arteaga","totalDays":40,"score":8,"overBudgetJobs":[],"lowHoursJobs":[]}],"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | DR Horton Props","occurrences":1,"minHours":1,"crews":["Hardscape Crew 2-Henry Raymundo"]}]},{"manager":"David Newton","averageScore":4.12,"crewCount":5,"crews":[{"name":"EN MT 18-Mark Horn","totalDays":28,"score":5.6,"overBudgetJobs":[],"lowHoursJobs":[{"job":"Pacolet Milliken - G | Weekly Maintenance","occurrences":2,"minHours":6.01}]},{"name":"EN MT 16 - Jeivy Cardona","totalDays":25,"score":5,"overBudgetJobs":[],"lowHoursJobs":[{"job":"1670 Wealth Manageme | Pruning","occurrences":1,"minHours":1.14}]},{"name":"EN MT 13 - Alfredo (Burro) Lopez","totalDays":22,"score":4.4,"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | Spring Annuals","occurrences":2,"minHours":0.72},{"job":"Episcopal Church of  | Pruning","occurrences":1,"minHours":4.05},{"job":"Treemont Commons | Spring Annuals","occurrences":1,"minHours":1.8},{"job":"SRHS Duncan Family M | Landscaping","occurrences":1,"minHours":6},{"job":"Mark III Properties  | Summer Flowers","occurrences":1,"minHours":5},{"job":"SRHS Academy Westsid | Summer Flowers","occurrences":1,"minHours":5},{"job":"Varner Station | Spring Annuals","occurrences":1,"minHours":1.8},{"job":"LW Cott | Spring Annuals","occurrences":1,"minHours":1.8},{"job":"Sage Grove | Spring Annuals","occurrences":1,"minHours":1.8}]},{"name":"EN MT 12 - Alfredo Rivera","totalDays":18,"score":3.6,"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | Spring Annuals","occurrences":1,"minHours":0.72},{"job":"Hunters Ridge | Spring Annuals","occurrences":1,"minHours":1.8},{"job":"Harper Ridge | Spring Annuals","occurrences":1,"minHours":2.25}]},{"name":"EN MT 17 - Jacob McMillan","totalDays":12,"score":2.4,"overBudgetJobs":[],"lowHoursJobs":[]}],"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | Spring Annuals","occurrences":3,"minHours":0.72,"crews":["EN MT 13 - Alfredo (Burro) Lopez","EN MT 12 - Alfredo Rivera"]},{"job":"Pacolet Milliken - G | Weekly Maintenance","occurrences":2,"minHours":6.01,"crews":["EN MT 18-Mark Horn"]},{"job":"1670 Wealth Manageme | Pruning","occurrences":1,"minHours":1.14,"crews":["EN MT 16 - Jeivy Cardona"]},{"job":"Episcopal Church of  | Pruning","occurrences":1,"minHours":4.05,"crews":["EN MT 13 - Alfredo (Burro) Lopez"]},{"job":"Treemont Commons | Spring Annuals","occurrences":1,"minHours":1.8,"crews":["EN MT 13 - Alfredo (Burro) Lopez"]},{"job":"SRHS Duncan Family M | Landscaping","occurrences":1,"minHours":6,"crews":["EN MT 13 - Alfredo (Burro) Lopez"]},{"job":"Mark III Properties  | Summer Flowers","occurrences":1,"minHours":5,"crews":["EN MT 13 - Alfredo (Burro) Lopez"]},{"job":"SRHS Academy Westsid | Summer Flowers","occurrences":1,"minHours":5,"crews":["EN MT 13 - Alfredo (Burro) Lopez"]},{"job":"Varner Station | Spring Annuals","occurrences":1,"minHours":1.8,"crews":["EN MT 13 - Alfredo (Burro) Lopez"]},{"job":"LW Cott | Spring Annuals","occurrences":1,"minHours":1.8,"crews":["EN MT 13 - Alfredo (Burro) Lopez"]},{"job":"Sage Grove | Spring Annuals","occurrences":1,"minHours":1.8,"crews":["EN MT 13 - Alfredo (Burro) Lopez"]},{"job":"Hunters Ridge | Spring Annuals","occurrences":1,"minHours":1.8,"crews":["EN MT 12 - Alfredo Rivera"]},{"job":"Harper Ridge | Spring Annuals","occurrences":1,"minHours":2.25,"crews":["EN MT 12 - Alfredo Rivera"]}]},{"manager":"Antonio Galan","averageScore":6.51,"crewCount":7,"crews":[{"name":"Casie Oliver","totalDays":38,"score":7.6,"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | DR Horton Props","occurrences":1,"minHours":1}]},{"name":"Landscape Const 1 - Ben Briseno","totalDays":40,"score":8,"overBudgetJobs":[],"lowHoursJobs":[]},{"name":"Landscape Const 2 - Shorty","totalDays":38,"score":7.6,"overBudgetJobs":[],"lowHoursJobs":[]},{"name":"Landscape Const 3 - Jesse Goodwin","totalDays":35,"score":7,"overBudgetJobs":[],"lowHoursJobs":[]},{"name":"Landscape Const 4 - Jesus Palacios","totalDays":30,"score":6,"overBudgetJobs":[],"lowHoursJobs":[]},{"name":"Landscape Const 5 - Anthony Brusso 1414","totalDays":22,"score":4.4,"overBudgetJobs":[],"lowHoursJobs":[]},{"name":"Landscape Const 6 - Constantino","totalDays":20,"score":4,"overBudgetJobs":[],"lowHoursJobs":[]}],"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | DR Horton Props","occurrences":1,"minHours":1,"crews":["Casie Oliver"]}]},{"manager":"Nau Jaramillo","averageScore":7.4,"crewCount":3,"crews":[{"name":"Irrigation 2 - Francisco Rojo","totalDays":40,"score":8,"overBudgetJobs":[],"lowHoursJobs":[]},{"name":"Irrigation 3 - Jose Guaman","totalDays":37,"score":7.4,"overBudgetJobs":[],"lowHoursJobs":[]},{"name":"Irrigation 4 - Leonardo Paulin","totalDays":31,"score":6.2,"overBudgetJobs":[],"lowHoursJobs":[]}],"overBudgetJobs":[],"lowHoursJobs":[]},{"manager":"Larry Hanson","averageScore":1.8,"crewCount":1,"crews":[{"name":"GVL-Enh-1 Daniel Sutton","totalDays":9,"score":1.8,"overBudgetJobs":[],"lowHoursJobs":[{"job":"Bridgeway -Laurens | Pruning","occurrences":1,"minHours":5.33}]}],"overBudgetJobs":[],"lowHoursJobs":[{"job":"Bridgeway -Laurens | Pruning","occurrences":1,"minHours":5.33,"crews":["GVL-Enh-1 Daniel Sutton"]}]}]};
+const DATA = {"runDate":"2026-04-08T21:00:00.000Z","windowStart":"April 06, 2026","windowEnd":"June 07, 2026","weekLabels":["Apr 6","Apr 13","Apr 20","Apr 27","May 4","May 11","May 18","May 25"],"managers":[{"manager":"Javier Guzman","avgScore":8,"crewCount":3,"weekAvgs":[1,1,1,1,1,1,1,0.07],"crews":[{"name":"Hardscape Crew 2-Henry Raymundo","weekScores":[1,1,1,1,1,1,1,0],"avgScore":7.75,"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | DR Horton Props","occurrences":1,"minHours":1}],"repeatLowHours":[],"emptyDays":[],"lightDays":[],"jobRecurrence":[{"job":"The One at Ooltewah | Landscaping","weekCount":7,"totalOccurrences":7,"avgHours":8,"flagged":false},{"job":"The Enclave at Cambr | Irrigation","weekCount":7,"totalOccurrences":7,"avgHours":32,"flagged":false},{"job":"Baxter Village | DR Horton Props","occurrences":1,"minHours":1}]},{"name":"Hardscape Crew 3-Miguel Paulin","weekScores":[1,1,1,1,1,1,1,0.2],"avgScore":7.9,"overBudgetJobs":[],"lowHoursJobs":[],"repeatLowHours":[],"emptyDays":[],"lightDays":[],"jobRecurrence":[{"job":"Prisma Health | Hardscape","weekCount":8,"totalOccurrences":40,"avgHours":40,"flagged":false},{"job":"Camden Industrial Re | Landscaping","weekCount":8,"totalOccurrences":40,"avgHours":90,"flagged":false}]},{"name":"Hardscape Crew 4 - Jose Usiel Arteaga","weekScores":[1,1,1,1,1,1,1,0],"avgScore":7.75,"overBudgetJobs":[],"lowHoursJobs":[],"repeatLowHours":[],"emptyDays":["Fri"],"lightDays":[],"jobRecurrence":[{"job":"Greer Multifamily | Landscaping","weekCount":7,"totalOccurrences":28,"avgHours":40,"flagged":false}]}],"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | DR Horton Props","occurrences":1,"minHours":1,"crew":"Hardscape Crew 2-Henry Raymundo"}],"repeatLowHours":[]},{"manager":"Nau Jaramillo","avgScore":6.65,"crewCount":3,"weekAvgs":[0.73,1,0.93,1,1,1,1,0],"crews":[{"name":"Irrigation 2 - Francisco Rojo","weekScores":[0.8,1,1,1,1,1,1,0],"avgScore":7.2},{"name":"Irrigation 3 - Jose Guaman","weekScores":[0.8,1,0.8,1,1,1,1,0],"avgScore":7},{"name":"Irrigation 4 - Leonardo Paulin","weekScores":[0.6,1,1,1,1,1,1,0],"avgScore":6.75}],"overBudgetJobs":[],"lowHoursJobs":[],"repeatLowHours":[]},{"manager":"Antonio Galan","avgScore":6.16,"crewCount":7,"weekAvgs":[0.86,0.71,0.71,0.8,0.86,0.86,0.86,0.49],"crews":[{"name":"Casie Oliver","weekScores":[1,1,1,1,1,1,1,0.6],"avgScore":7.7},{"name":"Landscape Const 1 - Ben Briseno","weekScores":[1,1,1,1,1,1,1,1],"avgScore":8},{"name":"Landscape Const 2 - Shorty","weekScores":[1,0.8,0.8,1,1,1,1,0.6],"avgScore":7.25},{"name":"Landscape Const 3 - Jesse Goodwin","weekScores":[1,0.8,0.8,0.8,1,1,1,0.4],"avgScore":7},{"name":"Landscape Const 4 - Jesus Palacios","weekScores":[0.8,0.6,0.6,0.8,0.8,0.8,0.8,0.4],"avgScore":6.25},{"name":"Landscape Const 5 - Anthony Brusso 1414","weekScores":[0.6,0.4,0.4,0.6,0.6,0.6,0.6,0.4],"avgScore":4.75},{"name":"Landscape Const 6 - Constantino","weekScores":[0.6,0.4,0.4,0.4,0.6,0.6,0.6,0],"avgScore":3.75}],"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | DR Horton Props","occurrences":1,"minHours":1,"crew":"Casie Oliver"}],"repeatLowHours":[]},{"manager":"David Newton","avgScore":3.36,"crewCount":5,"weekAvgs":[0.88,0.92,0.64,0.24,0.12,0.12,0.24,0.16],"crews":[{"name":"EN MT 18-Mark Horn","weekScores":[1,1,0.8,0.4,0.2,0.2,0.4,0.2],"avgScore":4.5},{"name":"EN MT 16 - Jeivy Cardona","weekScores":[1,1,0.8,0.4,0,0,0.2,0.2],"avgScore":3.6},{"name":"EN MT 13 - Alfredo (Burro) Lopez","weekScores":[1,1,0.6,0.2,0.2,0.2,0.4,0.2],"avgScore":3.8},{"name":"EN MT 12 - Alfredo Rivera","weekScores":[0.8,0.8,0.4,0.2,0.2,0.2,0.2,0.2],"avgScore":3},{"name":"EN MT 17 - Jacob McMillan","weekScores":[0.6,0.8,0.6,0,0,0,0,0],"avgScore":2}],"overBudgetJobs":[],"lowHoursJobs":[{"job":"Baxter Village | Spring Annuals","occurrences":3,"minHours":0.72,"crew":"EN MT 13"},{"job":"Pacolet Milliken - G | Weekly Maintenance","occurrences":2,"minHours":6.01,"crew":"EN MT 18"},{"job":"1670 Wealth Manageme | Pruning","occurrences":1,"minHours":1.14,"crew":"EN MT 16"},{"job":"Episcopal Church of  | Pruning","occurrences":1,"minHours":4.05,"crew":"EN MT 13"},{"job":"Treemont Commons | Spring Annuals","occurrences":1,"minHours":1.8,"crew":"EN MT 13"},{"job":"SRHS Duncan Family M | Landscaping","occurrences":1,"minHours":6,"crew":"EN MT 13"},{"job":"Mark III Properties  | Summer Flowers","occurrences":1,"minHours":5,"crew":"EN MT 13"},{"job":"SRHS Academy Westsid | Summer Flowers","occurrences":1,"minHours":5,"crew":"EN MT 13"},{"job":"Varner Station | Spring Annuals","occurrences":1,"minHours":1.8,"crew":"EN MT 13"},{"job":"LW Cott | Spring Annuals","occurrences":1,"minHours":1.8,"crew":"EN MT 13"},{"job":"Sage Grove | Spring Annuals","occurrences":1,"minHours":1.8,"crew":"EN MT 13"},{"job":"Hunters Ridge | Spring Annuals","occurrences":1,"minHours":1.8,"crew":"EN MT 12"},{"job":"Harper Ridge | Spring Annuals","occurrences":1,"minHours":2.25,"crew":"EN MT 12"}],"repeatLowHours":[{"job":"Baxter Village | Spring Annuals","weekCount":3,"avgHours":0.72,"crews":["EN MT 13","EN MT 12"]},{"job":"Pacolet Milliken - G | Weekly Maintenance","weekCount":2,"avgHours":6.01,"crews":["EN MT 18"]}]},{"manager":"Larry Hanson","avgScore":1.6,"crewCount":1,"weekAvgs":[0.6,0.4,0.2,0.4,0,0,0,0],"crews":[{"name":"GVL-Enh-1 Daniel Sutton","weekScores":[0.6,0.4,0.2,0.4,0,0,0,0],"avgScore":1.6,"lowHoursJobs":[{"job":"Bridgeway -Laurens | Pruning","occurrences":1,"minHours":5.33}]}],"overBudgetJobs":[],"lowHoursJobs":[{"job":"Bridgeway -Laurens | Pruning","occurrences":1,"minHours":5.33,"crew":"GVL-Enh-1 Daniel Sutton"}],"repeatLowHours":[]}]};
+const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri'];
+
 function cls(s){return s>=6?'good':s>=3?'warn':'low'}
-function render(data){
-  const mgrs=data.managers||[];
-  const sorted=[...mgrs].sort((a,b)=>b.averageScore-a.averageScore);
-  const overall=mgrs.length?mgrs.reduce((s,m)=>s+m.averageScore,0)/mgrs.length:0;
-  const top=sorted[0]||{};
-  const totalCrews=mgrs.reduce((s,m)=>s+m.crewCount,0);
-  const totalLH=mgrs.reduce((s,m)=>s+m.lowHoursJobs.length,0);
-  const totalOB=mgrs.reduce((s,m)=>s+m.overBudgetJobs.length,0);
 
-  document.getElementById('last-updated').innerHTML='<span class="pulse"></span>'+new Date(data.runDate).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-  document.getElementById('window-range').textContent=(data.windowStart||'')+(data.windowEnd?' – '+data.windowEnd:'');
+function showTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', b.textContent.toLowerCase().includes(name)));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-'+name));
+}
 
-  const summary=`<div class="summary-strip">
+// ── SPARKLINE ───────────────────────────────────────────────────────
+function sparklineSVG(scores, w, h, color) {
+  const max = Math.max(...scores, 1);
+  const pts = scores.map((s, i) => {
+    const x = (i / (scores.length - 1)) * w;
+    const y = h - (s / max) * (h - 4) - 2;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const areaBot = h;
+  const areaL = (0 / (scores.length-1)) * w;
+  const areaR = ((scores.length-1) / (scores.length-1)) * w;
+  const area = `${areaL},${areaBot} ${pts.split(' ').join(' ')} ${areaR},${areaBot}`;
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <polygon points="${area}" fill="${color}" opacity="0.12"/>
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${scores.map((s,i) => {
+      const x = (i/(scores.length-1))*w;
+      const y = h - (s/max)*(h-4) - 2;
+      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="${color}"/>`;
+    }).join('')}
+  </svg>`;
+}
+
+function trendLabel(scores) {
+  const first = scores.slice(0,3).reduce((a,b)=>a+b,0)/3;
+  const last = scores.slice(-3).reduce((a,b)=>a+b,0)/3;
+  const diff = last - first;
+  if (diff > 0.1) return ['trend-up','↑ Improving'];
+  if (diff < -0.1) return ['trend-down','↓ Dropping'];
+  return ['trend-flat','→ Stable'];
+}
+
+// ── OVERVIEW TAB ─────────────────────────────────────────────────────
+function renderOverview(data) {
+  const mgrs = data.managers || [];
+  const sorted = [...mgrs].sort((a,b) => b.avgScore - a.avgScore);
+  const overall = mgrs.length ? mgrs.reduce((s,m) => s+m.avgScore,0)/mgrs.length : 0;
+  const totalCrews = mgrs.reduce((s,m)=>s+m.crewCount,0);
+  const top = sorted[0]||{};
+  const totalLH = mgrs.reduce((s,m)=>s+(m.lowHoursJobs||[]).length,0);
+  const totalOB = mgrs.reduce((s,m)=>s+(m.overBudgetJobs||[]).length,0);
+
+  const summary = `<div class="summary-strip">
     <div class="s-card"><div class="s-label">Overall avg</div><div class="s-value">${overall.toFixed(2)}<small>/ 8 wks</small></div></div>
     <div class="s-card"><div class="s-label">Managers</div><div class="s-value">${mgrs.length}<small>tracked</small></div></div>
     <div class="s-card"><div class="s-label">Total crews</div><div class="s-value">${totalCrews}</div></div>
-    <div class="s-card"><div class="s-label">Top manager</div><div class="s-value" style="font-size:20px">${(top.manager||'').split(' ')[0]}<small>${(top.averageScore||0).toFixed(2)}</small></div></div>
-    <div class="s-card"><div class="s-label">Under-hours jobs</div><div class="s-value" style="color:${totalLH>0?'var(--amber-score)':'var(--green-score)'}">${totalLH}</div></div>
-    <div class="s-card"><div class="s-label">Over-budget jobs</div><div class="s-value" style="color:${totalOB>0?'var(--red)':'var(--green-score)'}">${totalOB}</div></div>
+    <div class="s-card"><div class="s-label">Top manager</div><div class="s-value" style="font-size:20px">${(top.manager||'').split(' ')[0]}<small>${(top.avgScore||0).toFixed(2)}</small></div></div>
+    <div class="s-card"><div class="s-label">Under-hours jobs</div><div class="s-value" style="color:${totalLH>0?'var(--amber)':'var(--green)'}">${totalLH}</div></div>
+    <div class="s-card"><div class="s-label">Over-budget jobs</div><div class="s-value" style="color:${totalOB>0?'var(--red)':'var(--green)'}">${totalOB}</div></div>
   </div>`;
 
-  const bars=sorted.map(m=>{const pct=Math.min((m.averageScore/8)*100,100);return`<div class="bar-wrap"><div class="bar ${cls(m.averageScore)}" style="height:${pct}%"><div class="bar-val">${m.averageScore.toFixed(1)}</div><div class="bar-name">${m.manager.split(' ')[0]}</div></div></div>`;}).join('');
-  const chart=`<div class="chart-card"><div class="card-title">Coverage score by manager &middot; max 8.0 = fully booked 8 weeks out</div><div class="bar-chart">${bars}</div><div class="chart-footer">${data.windowStart||''} &rarr; ${data.windowEnd||''}</div></div>`;
+  const bars = sorted.map(m => {
+    const pct = Math.min((m.avgScore/8)*100,100);
+    return `<div class="bar-wrap"><div class="bar ${cls(m.avgScore)}" style="height:${pct}%"><div class="bar-val">${m.avgScore.toFixed(1)}</div><div class="bar-name">${m.manager.split(' ')[0]}</div></div></div>`;
+  }).join('');
+  const chart = `<div class="chart-card"><div class="card-title">Coverage score by manager &middot; max 8.0 = fully booked</div><div class="bar-chart">${bars}</div><div class="chart-footer">${data.windowStart||''} &rarr; ${data.windowEnd||''}</div></div>`;
 
-  const cards=sorted.map(m=>{const c=cls(m.averageScore);const pct=Math.min((m.averageScore/8)*100,100);const crews=(m.crews||[]).map(cr=>{const cp=Math.min((cr.score/8)*100,100);return`<div class="crew-row"><div class="crew-name">${cr.name}</div><div class="crew-mini"><div class="crew-mini-fill" style="width:${cp}%"></div></div><div class="crew-score">${cr.score.toFixed(1)}</div></div>`;}).join('');return`<div class="m-card"><div class="m-header"><div class="m-name">${m.manager}</div><div class="m-score ${c}">${m.averageScore.toFixed(2)}</div></div><div class="m-bar-wrap"><div class="m-bar-fill ${c}" style="width:${pct}%"></div></div><div class="crew-list">${crews}</div></div>`;}).join('');
+  const cards = sorted.map(m => {
+    const c = cls(m.avgScore);
+    const pct = Math.min((m.avgScore/8)*100,100);
+    const crews = (m.crews||[]).map(cr => {
+      const cp = Math.min((cr.avgScore/8)*100,100);
+      return `<div class="crew-row"><div class="crew-name">${cr.name}</div><div class="crew-mini"><div class="crew-mini-fill" style="width:${cp}%"></div></div><div class="crew-score">${cr.avgScore.toFixed(1)}</div></div>`;
+    }).join('');
+    return `<div class="m-card"><div class="m-header"><div class="m-name">${m.manager}</div><div class="m-score ${c}">${m.avgScore.toFixed(2)}</div></div><div class="m-bar-wrap"><div class="m-bar-fill ${c}" style="width:${pct}%"></div></div><div class="crew-list">${crews}</div></div>`;
+  }).join('');
 
-  // Over budget section
   const obCards = sorted.map(m => {
-    const jobs = m.overBudgetJobs;
-    const rows = jobs.length ? jobs.map(j => `<div class="alert-row ob"><div class="alert-job">${j.job}</div><div class="alert-meta"><span>${j.occurrences}x flagged</span><span>${j.crews.join(', ')}</span></div></div>`).join('') : `<div class="none-msg">No over-budget jobs</div>`;
-    return `<div class="alert-card ob"><div class="alert-manager">${m.manager}<span class="alert-badge badge-ob">${jobs.length} job${jobs.length!==1?'s':''}</span></div><div class="alert-list">${rows}</div></div>`;
+    const jobs = m.overBudgetJobs||[];
+    const rows = jobs.length ? jobs.map(j=>`<div class="alert-row ob"><div class="alert-job">${j.job}</div><div class="alert-meta"><span>${j.occurrences}x flagged</span><span>${j.crew||''}</span></div></div>`).join('') : `<div class="none-msg">No over-budget jobs</div>`;
+    return `<div class="alert-card ob"><div class="alert-manager">${m.manager}<span class="badge badge-ob">${jobs.length}</span></div><div class="alert-list">${rows}</div></div>`;
   }).join('');
 
-  // Low hours section
   const lhCards = sorted.map(m => {
-    const jobs = m.lowHoursJobs;
-    const rows = jobs.length ? jobs.map(j => `<div class="alert-row lh"><div class="alert-job">${j.job}</div><div class="alert-meta"><span>${j.occurrences}x scheduled</span><span>min ${j.minHours.toFixed(1)} hrs</span><span>${j.crews.join(', ')}</span></div></div>`).join('') : `<div class="none-msg">No under-hours jobs</div>`;
-    return `<div class="alert-card lh"><div class="alert-manager">${m.manager}<span class="alert-badge badge-lh">${jobs.length} job${jobs.length!==1?'s':''}</span></div><div class="alert-list">${rows}</div></div>`;
+    const jobs = m.lowHoursJobs||[];
+    const rows = jobs.length ? jobs.map(j=>`<div class="alert-row lh"><div class="alert-job">${j.job}</div><div class="alert-meta"><span>${j.occurrences}x</span><span>min ${j.minHours.toFixed(1)}h</span><span>${j.crew||''}</span></div></div>`).join('') : `<div class="none-msg">No under-hours jobs</div>`;
+    return `<div class="alert-card lh"><div class="alert-manager">${m.manager}<span class="badge badge-lh">${jobs.length}</span></div><div class="alert-list">${rows}</div></div>`;
   }).join('');
 
-  document.getElementById('main-content').innerHTML=
+  document.getElementById('overview-content').innerHTML =
     summary + chart +
     '<div class="section-title">Manager breakdown</div><div class="managers-grid">'+cards+'</div>'+
-    '<div class="section-title">Over-budget jobs &nbsp;&middot;&nbsp; flagged by Aspire</div><div class="alert-grid">'+obCards+'</div>'+
-    '<div class="section-title">Under-hours jobs &nbsp;&middot;&nbsp; scheduled less than 8 hrs</div><div class="alert-grid">'+lhCards+'</div>';
+    '<div class="section-title">Over-budget jobs &middot; flagged by Aspire</div><div class="alert-grid">'+obCards+'</div>'+
+    '<div class="section-title">Under-hours jobs &middot; scheduled less than 8 hrs</div><div class="alert-grid">'+lhCards+'</div>';
 }
-render(DATA);
+
+// ── ANALYSIS TAB ──────────────────────────────────────────────────────
+function renderAnalysis(data) {
+  const mgrs = data.managers || [];
+  const sorted = [...mgrs].sort((a,b) => b.avgScore - a.avgScore);
+  const WL = data.weekLabels || [];
+
+  // 1. Week-by-week trend per manager
+  const trendCards = sorted.map(m => {
+    const [tClass, tText] = trendLabel(m.weekAvgs);
+    const spark = sparklineSVG(m.weekAvgs, 260, 52, '#C0392B');
+    const crewSparklines = (m.crews||[]).map(c => {
+      const cs = sparklineSVG(c.weekScores||[], 80, 24, '#C0392B');
+      return `<div class="crew-trend-row"><div class="crew-trend-name">${c.name}</div><div class="crew-spark">${cs}</div><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);min-width:28px;text-align:right">${c.avgScore.toFixed(1)}</div></div>`;
+    }).join('');
+    const weekRow = m.weekAvgs.map((v,i) => `<div style="font-family:'DM Mono',monospace;font-size:10px;text-align:center;color:${v<0.3?'var(--red)':v<0.7?'var(--amber)':'var(--green)'}">${(v*8).toFixed(0)}</div>`).join('');
+    return `<div class="analysis-card"><div class="analysis-header"><div class="analysis-manager">${m.manager}</div><span class="trend-label ${tClass}">${tText}</span></div>
+      <div class="sparkline-wrap">${spark}
+        <div class="spark-labels">${WL.map(l=>`<span class="spark-label">${l}</span>`).join('')}</div>
+      </div>
+      <div class="crew-trends">${crewSparklines}</div>
+    </div>`;
+  }).join('');
+
+  // 4. Repeat low-hours offenders
+  const repeatCards = sorted.map(m => {
+    const repeats = m.repeatLowHours || [];
+    const rows = repeats.length ? repeats.map(r => `<div class="repeat-row"><div class="repeat-job">${r.job}</div><div class="repeat-meta"><span>${r.weekCount}/8 weeks</span><span>avg ${r.avgHours.toFixed(1)} hrs</span><span>${(r.crews||[]).join(', ')}</span></div></div>`).join('') : `<div class="none-msg">No repeat offenders</div>`;
+    return `<div class="alert-card lh"><div class="alert-manager">${m.manager}<span class="badge badge-lh">${repeats.length} repeat${repeats.length!==1?'s':''}</span></div><div class="repeat-list">${rows}</div></div>`;
+  }).join('');
+
+  // 7. Empty day patterns
+  const heatCards = sorted.map(m => {
+    const crewCols = (m.crews||[]).map(crew => {
+      const dt = crew.dayTotals || [0,0,0,0,0];
+      const maxD = Math.max(...dt, 1);
+      const cols = dt.map((v,i) => `<div class="day-col"><div class="day-bar-fill ${v===0?'empty':''}" style="height:${v===0?4:Math.max(4,(v/maxD)*44)}px;"></div><div class="day-name">${DAY_NAMES[i]}</div></div>`).join('');
+      const emptyStr = (crew.emptyDays||[]).length ? ' &middot; Never: '+crew.emptyDays.join(',') : '';
+      return `<div style="margin-bottom:10px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${crew.name}${emptyStr}</div><div class="day-bars">${cols}</div></div>`;
+    }).join('');
+    return `<div class="heatmap-card"><div class="card-title">${m.manager}</div>${crewCols}</div>`;
+  }).join('');
+
+  // 8. Job recurrence
+  const recurCards = sorted.map(m => {
+    const allJobs = {};
+    (m.crews||[]).forEach(c => (c.jobRecurrence||[]).forEach(j => {
+      if (!allJobs[j.job]) allJobs[j.job] = { ...j, crews: [] };
+      allJobs[j.job].weekCount = Math.max(allJobs[j.job].weekCount, j.weekCount);
+      allJobs[j.job].crews.push(c.name.split(' ').slice(-1)[0]);
+    }));
+    const jobList = Object.values(allJobs).sort((a,b)=>b.weekCount-a.weekCount).slice(0,8);
+    const rows = jobList.map(j => {
+      const rc = j.weekCount===8?'every':j.weekCount>=5?'mostly':'rare';
+      const label = j.weekCount===8?'Every week':j.weekCount>=5?`${j.weekCount}/8 wks`:`${j.weekCount}/8 wks`;
+      return `<div class="recur-row ${rc}"><div class="recur-job" title="${j.job}">${j.job}</div><div class="recur-weeks">${label}</div><span class="recur-badge ${rc}">${rc}</span></div>`;
+    }).join('');
+    return `<div class="analysis-card" style="animation-delay:0s"><div class="analysis-header"><div class="analysis-manager">${m.manager}</div></div><div class="recur-list">${rows}</div></div>`;
+  }).join('');
+
+  document.getElementById('analysis-content').innerHTML =
+    '<div class="section-title">1 &nbsp;&middot;&nbsp; Week-by-week trend &nbsp;&middot;&nbsp; scores per week (0-8)</div><div class="analysis-grid">'+trendCards+'</div>'+
+    '<div class="section-title">4 &nbsp;&middot;&nbsp; Repeat under-hours offenders &nbsp;&middot;&nbsp; same job, low hours, multiple weeks</div><div class="alert-grid">'+repeatCards+'</div>'+
+    '<div class="section-title">7 &nbsp;&middot;&nbsp; Empty day patterns &nbsp;&middot;&nbsp; which days are consistently unscheduled</div><div class="heatmap-grid">'+heatCards+'</div>'+
+    '<div class="section-title">8 &nbsp;&middot;&nbsp; Job recurrence &nbsp;&middot;&nbsp; how often each job appears across 8 weeks</div><div class="analysis-grid">'+recurCards+'</div>';
+}
+
+function init() {
+  document.getElementById('last-updated').innerHTML = '<span class="pulse"></span>'+new Date(DATA.runDate).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('window-range').textContent = (DATA.windowStart||'') + (DATA.windowEnd?' – '+DATA.windowEnd:'');
+  renderOverview(DATA);
+  renderAnalysis(DATA);
+}
+init();
 </script>
 </body>
 </html>
