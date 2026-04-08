@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crew Coverage Dashboard — Roebuck Landscaping</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700;800&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#C0392B;--red-dark:#922B21;--red-light:#E74C3C;--red-pale:#FADBD8;--red-faint:#FDF2F0;--cream:#FDF8F5;--white:#FFFFFF;--border:#E8D5D2;--text:#1A0A09;--muted:#7B3F38;--muted-light:#B07068;--surface:#FFFFFF;--surface2:#FDF2F0;--green-score:#1A7A3A;--amber-score:#B7770D;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--text);font-family:'Source Sans 3',sans-serif;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle at 1px 1px,rgba(192,57,43,0.06) 1px,transparent 0);background-size:28px 28px}
+.wrap{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 24px 60px}
+.topbar{background:var(--red);height:6px;margin:0 -24px}
+header{display:flex;align-items:center;gap:28px;padding:32px 0 36px;border-bottom:2px solid var(--border);margin-bottom:40px;flex-wrap:wrap}
+.logo-img{width:88px;height:88px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(192,57,43,0.18))}
+.header-text .eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
+.header-text h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:800;line-height:1.1}
+.header-meta{text-align:right;flex-shrink:0;margin-left:auto}
+.meta-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted-light);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.meta-value{font-family:'DM Mono',monospace;font-size:13px;color:var(--red);margin-bottom:10px;font-weight:500}
+.pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:6px;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.summary-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:40px}
+.s-card{background:var(--white);border:1.5px solid var(--border);border-top:3px solid var(--red);border-radius:10px;padding:18px 20px;transition:box-shadow .2s;box-shadow:0 1px 4px rgba(192,57,43,0.06)}
+.s-card:hover{box-shadow:0 4px 16px rgba(192,57,43,0.12)}
+.s-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-light);margin-bottom:8px}
+.s-value{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;line-height:1;color:var(--text)}
+.s-value small{font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:400;color:var(--muted-light);margin-left:4px}
+.chart-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:28px;margin-bottom:32px;box-shadow:0 1px 4px rgba(192,57,43,0.06)}
+.card-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-light);margin-bottom:28px}
+.bar-chart{display:flex;align-items:flex-end;gap:16px;height:160px;padding-bottom:36px;position:relative;border-bottom:1.5px solid var(--border)}
+.bar-chart::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
+.bar{width:100%;max-width:72px;border-radius:6px 6px 0 0;position:relative;transition:filter .2s}
+.bar:hover{filter:brightness(1.08)}
+.bar.good{background:var(--red)}.bar.warn{background:var(--amber-score)}.bar.low{background:#999}
+.bar-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--text);position:absolute;top:-20px;left:50%;transform:translateX(-50%);white-space:nowrap;font-weight:500}
+.bar-name{font-family:'Source Sans 3',sans-serif;font-size:11px;font-weight:600;color:var(--muted);position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);white-space:nowrap}
+.chart-footer{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted-light);text-align:center;margin-top:14px}
+.section-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted-light);margin-bottom:16px}
+.managers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px;margin-bottom:48px}
+.m-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:24px;transition:box-shadow .2s,transform .2s;box-shadow:0 1px 4px rgba(192,57,43,0.06);animation:fadeUp .5s ease both}
+.m-card:hover{box-shadow:0 6px 20px rgba(192,57,43,0.13);transform:translateY(-2px)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.m-card:nth-child(1){animation-delay:.05s}.m-card:nth-child(2){animation-delay:.10s}.m-card:nth-child(3){animation-delay:.15s}.m-card:nth-child(4){animation-delay:.20s}.m-card:nth-child(5){animation-delay:.25s}
+.m-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.m-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700}
+.m-score{font-family:'DM Mono',monospace;font-size:22px;font-weight:500}
+.m-score.good{color:var(--green-score)}.m-score.warn{color:var(--amber-score)}.m-score.low{color:#888}
+.m-bar-wrap{height:5px;background:var(--red-pale);border-radius:99px;margin-bottom:16px;overflow:hidden}
+.m-bar-fill{height:100%;border-radius:99px}
+.m-bar-fill.good{background:var(--red)}.m-bar-fill.warn{background:var(--amber-score)}.m-bar-fill.low{background:#bbb}
+.crew-list{display:flex;flex-direction:column;gap:6px}
+.crew-row{display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--red-faint);border-radius:7px;border:1px solid transparent;transition:border-color .15s}
+.crew-row:hover{border-color:var(--border)}
+.crew-name{flex:1;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crew-mini{width:52px;height:3px;background:var(--red-pale);border-radius:99px;overflow:hidden;flex-shrink:0}
+.crew-mini-fill{height:100%;border-radius:99px;background:var(--red);opacity:.5}
+.crew-score{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);min-width:32px;text-align:right;flex-shrink:0;font-weight:500}
+footer{border-top:1.5px solid var(--border);padding-top:24px;display:flex;align-items:center;gap:12px}
+.foot-logo img{width:32px;height:32px;object-fit:contain;opacity:.7}
+.foot-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted-light);letter-spacing:.1em}
+@media(max-width:600px){.header-text h1{font-size:24px}.summary-strip{grid-template-columns:repeat(2,1fr)}.managers-grid{grid-template-columns:1fr}.header-meta{display:none}}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="wrap">
+<header>
+  <img class="logo-img" src="https://raw.githubusercontent.com/dchesebro-byte/aspiredashbpoardroebuck/main/logo.png" alt="Roebuck Landscaping" onerror="this.style.display='none'">
+  <div class="header-text">
+    <div class="eyebrow">Schedule Intelligence</div>
+    <h1>Crew Coverage<br>Dashboard</h1>
+  </div>
+  <div class="header-meta">
+    <div class="meta-label">Last updated</div>
+    <div class="meta-value" id="last-updated"></div>
+    <div class="meta-label">Coverage window</div>
+    <div class="meta-value" id="window-range"></div>
+  </div>
+</header>
+<div id="main-content"></div>
+<footer>
+  <div class="foot-logo"><img src="https://raw.githubusercontent.com/dchesebro-byte/aspiredashbpoardroebuck/main/logo.png" alt="Roebuck" onerror="this.style.display='none'"></div>
+  <div class="foot-note">ROEBUCK LANDSCAPING &nbsp;·&nbsp; CREW COVERAGE &nbsp;·&nbsp; UPDATED EVERY MONDAY</div>
+</footer>
+</div>
+<script>
+const DATA = {"runDate":"2026-04-08T16:18:39.549Z","windowStart":"April 06, 2026","windowEnd":"May 31, 2026","managers":[{"manager":"Javier Guzman","averageScore":8,"crewCount":3,"crews":[{"name":"Hardscape Crew 2-Henry Raymundo","totalDays":40,"score":8},{"name":"Hardscape Crew 3-Miguel Paulin","totalDays":40,"score":8},{"name":"Hardscape Crew 4 - Jose Usiel Arteaga","totalDays":40,"score":8}]},{"manager":"Nau Jaramillo","averageScore":7.4,"crewCount":3,"crews":[{"name":"Irrigation 2 - Francisco Rojo","totalDays":40,"score":8},{"name":"Irrigation 3 - Jose Guaman","totalDays":37,"score":7.4},{"name":"Irrigation 4 - Leonardo Paulin","totalDays":31,"score":6.2}]},{"manager":"Antonio Galan","averageScore":6.51,"crewCount":7,"crews":[{"name":"Casie Oliver","totalDays":38,"score":7.6},{"name":"Landscape Const 1 - Ben Briseno","totalDays":40,"score":8},{"name":"Landscape Const 2 - Shorty","totalDays":38,"score":7.6},{"name":"Landscape Const 3 - Jesse Goodwin","totalDays":35,"score":7},{"name":"Landscape Const 4 - Jesus Palacios","totalDays":30,"score":6},{"name":"Landscape Const 5 - Anthony Brusso 1414","totalDays":22,"score":4.4},{"name":"Landscape Const 6 - Constantino","totalDays":20,"score":4}]},{"manager":"David Newton","averageScore":4.12,"crewCount":5,"crews":[{"name":"EN MT 18-Mark Horn","totalDays":28,"score":5.6},{"name":"EN MT 16 - Jeivy Cardona","totalDays":25,"score":5},{"name":"EN MT 13 - Alfredo (Burro) Lopez","totalDays":22,"score":4.4},{"name":"EN MT 12 - Alfredo Rivera","totalDays":18,"score":3.6},{"name":"EN MT 17 - Jacob McMillan","totalDays":12,"score":2.4}]},{"manager":"Larry Hanson","averageScore":1.8,"crewCount":1,"crews":[{"name":"GVL-Enh-1 Daniel Sutton","totalDays":9,"score":1.8}]}]};
+function cls(s){return s>=6?'good':s>=3?'warn':'low'}
+function render(data){
+  const mgrs=data.managers||[];
+  const sorted=[...mgrs].sort((a,b)=>b.averageScore-a.averageScore);
+  const overall=mgrs.length?mgrs.reduce((s,m)=>s+m.averageScore,0)/mgrs.length:0;
+  const top=sorted[0]||{};
+  const totalCrews=mgrs.reduce((s,m)=>s+m.crewCount,0);
+  document.getElementById('last-updated').innerHTML='<span class="pulse"></span>'+new Date(data.runDate).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('window-range').textContent=(data.windowStart||'')+(data.windowEnd?' – '+data.windowEnd:'');
+  const summary=`<div class="summary-strip">
+    <div class="s-card"><div class="s-label">Overall avg</div><div class="s-value">${overall.toFixed(2)}<small>/ 8 wks</small></div></div>
+    <div class="s-card"><div class="s-label">Managers</div><div class="s-value">${mgrs.length}<small>tracked</small></div></div>
+    <div class="s-card"><div class="s-label">Total crews</div><div class="s-value">${totalCrews}</div></div>
+    <div class="s-card"><div class="s-label">Top manager</div><div class="s-value" style="font-size:20px">${(top.manager||'').split(' ')[0]}<small>${(top.averageScore||0).toFixed(2)}</small></div></div>
+  </div>`;
+  const bars=sorted.map(m=>{const pct=Math.min((m.averageScore/8)*100,100);return`<div class="bar-wrap"><div class="bar ${cls(m.averageScore)}" style="height:${pct}%"><div class="bar-val">${m.averageScore.toFixed(1)}</div><div class="bar-name">${m.manager.split(' ')[0]}</div></div></div>`;}).join('');
+  const chart=`<div class="chart-card"><div class="card-title">Coverage score by manager &middot; max 8.0 = fully booked 8 weeks out</div><div class="bar-chart">${bars}</div><div class="chart-footer">${data.windowStart||''} &rarr; ${data.windowEnd||''}</div></div>`;
+  const cards=sorted.map(m=>{const c=cls(m.averageScore);const pct=Math.min((m.averageScore/8)*100,100);const crews=(m.crews||[]).map(cr=>{const cp=Math.min((cr.score/8)*100,100);return`<div class="crew-row"><div class="crew-name">${cr.name}</div><div class="crew-mini"><div class="crew-mini-fill" style="width:${cp}%"></div></div><div class="crew-score">${cr.score.toFixed(1)}</div></div>`;}).join('');return`<div class="m-card"><div class="m-header"><div class="m-name">${m.manager}</div><div class="m-score ${c}">${m.averageScore.toFixed(2)}</div></div><div class="m-bar-wrap"><div class="m-bar-fill ${c}" style="width:${pct}%"></div></div><div class="crew-list">${crews}</div></div>`;}).join('');
+  document.getElementById('main-content').innerHTML=summary+chart+'<div class="section-title">Manager breakdown</div><div class="managers-grid">'+cards+'</div>';
+}
+render(DATA);
+</script>
+</body>
+</html>
